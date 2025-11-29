@@ -35,5 +35,14 @@ public class OneToOneController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping()
+    public ResponseEntity<Question> getQuestion(@RequestParam(name = "q_id") int id) {
+        Optional<Question> question = questionService.getQuestion(id);
+        if (question.isPresent()) {
+            return new ResponseEntity<>(question.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 
 }
