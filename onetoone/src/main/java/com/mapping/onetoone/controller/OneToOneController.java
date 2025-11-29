@@ -1,0 +1,39 @@
+package com.mapping.onetoone.controller;
+
+import com.mapping.onetoone.entity.Answer;
+import com.mapping.onetoone.entity.Question;
+import com.mapping.onetoone.service.AnswerService;
+import com.mapping.onetoone.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/onetoone")
+public class OneToOneController {
+    @Autowired
+    private QuestionService questionService;
+
+    @Autowired
+    private AnswerService answerService;
+
+    @PostMapping
+    public ResponseEntity<Question> saveQuestion(@RequestBody Question question) {
+        Question savedQuestion = questionService.saveQuestion(question);
+        return new ResponseEntity<Question>(savedQuestion, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{ans_id}")
+    public ResponseEntity<Answer> getAnswer(@PathVariable("ans_id") int id) {
+        Optional<Answer> answer = answerService.getAnswer(id);
+        if (answer.isPresent()) {
+            return new ResponseEntity<>(answer.get(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+}
